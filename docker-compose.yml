@@ -1,0 +1,14 @@
+services:
+  quince:
+    build: .
+    ports:
+      - '${QUINCE_PORT:-3000}:3000'
+    # Bei READ_ONLY=true (siehe unten) schreibt die App ohnehin nichts hierhin —
+    # der Mount lässt sich für eine solche Instanz also einfach weglassen.
+    volumes:
+      - '${QUINCE_DATA:-./data}:/data'
+    environment:
+      - ORIGIN=${ORIGIN:-http://localhost:3000}
+      - BODY_SIZE_LIMIT=${BODY_SIZE_LIMIT:-128M}
+      - READ_ONLY=${READ_ONLY:-false}
+    restart: unless-stopped

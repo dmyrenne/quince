@@ -1,0 +1,149 @@
+:root {
+	/* Bewusst reduziert: ein Papierton, ein abgesetzter Zutaten-Hintergrund,
+	   fast schwarzer Text, eine einzige Highlight-Farbe. Neutral-warm statt
+	   grünlich — Grüntöne wirken bei Essen schnell unappetitlich. */
+	--color-bg: #f7f6f2;
+	--color-surface: #f7f6f2;
+	--color-ingredients-bg: #edece8;
+
+	--color-ink: #1a1614;
+	--color-text: var(--color-ink);
+	--color-text-muted: color-mix(in oklab, var(--color-ink) 60%, transparent);
+	--color-border: color-mix(in oklab, var(--color-ink) 20%, transparent);
+	--color-border-strong: color-mix(in oklab, var(--color-ink) 35%, transparent);
+
+	/* Eine Highlight-Farbe für Mengenangaben, Zeiten und andere Kennzahlen */
+	--color-highlight: #853c00;
+	--color-quantity: var(--color-highlight);
+	--color-time: var(--color-highlight);
+	--color-link: var(--color-ink);
+
+	--font-heading: 'Playfair Display Variable', Georgia, serif;
+	--font-body: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+
+	/* Schriftgrößen als Tokens, damit sie zentral angepasst werden können
+	   statt verstreut in den Komponenten. */
+	--font-size-body: 1rem;
+	--font-size-description: 1.05rem;
+	--font-size-meta: 1rem;
+	--font-size-wordmark: 2rem;
+	--font-size-recipe-title: 3rem;
+	--font-size-section: 1.9rem;
+	--line-height-body: 1.4;
+	/* Playfair Display Variable kann 400–900 */
+	--font-weight-heading: 600;
+
+	--radius: 8px;
+	--shadow-card: 0 1px 2px color-mix(in oklab, var(--color-ink) 6%, transparent);
+
+	/* Breite der Bibliotheksansicht (Seitenleiste + Rezept) — der Header
+	   richtet sich daran aus, damit beide nicht auseinanderlaufen. */
+	--content-max-width: 1200px;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background: var(--color-bg);
+	color: var(--color-text);
+	font-family: var(--font-body);
+	font-size: var(--font-size-body);
+	font-weight: 400;
+	line-height: var(--line-height-body);
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+.font-heading {
+	font-family: var(--font-heading);
+	font-weight: var(--font-weight-heading);
+	color: var(--color-text);
+	margin: 0 0 0.4em;
+}
+
+p,
+ul,
+ol {
+	/* No inherited UA margins — every gap in this app is intentional and set
+	   explicitly where it's needed, instead of stacking with browser defaults. */
+	margin: 0;
+}
+
+a {
+	color: var(--color-link);
+	text-underline-offset: 0.15em;
+}
+
+img {
+	max-width: 100%;
+	display: block;
+}
+
+hr,
+.divider {
+	width: 120px;
+	border: none;
+	border-top: 1px solid var(--color-border);
+	margin: 1.5rem auto;
+}
+
+.quantity {
+	color: var(--color-quantity);
+	font-weight: 600;
+}
+
+.time-badge {
+	color: var(--color-time);
+	font-weight: 600;
+}
+
+/* Klammerinhalte in Zutatenzeilen, z. B. "(500 g)" oder "(optional)" — gedämpfte
+   Sekundärfarbe statt normalem Text, macht sie als Zusatzinfo erkennbar. Eine
+   darin verschachtelte .quantity behält trotzdem ihre eigene Hervorhebung. */
+.parenthetical {
+	color: var(--color-text-muted);
+}
+
+.card {
+	background: var(--color-surface);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius);
+	box-shadow: var(--shadow-card);
+}
+
+.container {
+	max-width: 880px;
+	margin: 0 auto;
+	padding: 0 1.25rem;
+}
+
+/* Breite der Hauptansicht (Seitenleiste + Rezept) — der Header teilt sich
+   diese Klasse, damit beide immer gleich breit bleiben. */
+.content-width {
+	max-width: var(--content-max-width);
+	margin: 0 auto;
+	padding: 0 1.25rem;
+}
+
+/* Wie in Mela: kein eigener PDF-Generator, sondern nur eine aufgeräumte
+   Druckansicht über den normalen Browser-Druckdialog ("Als PDF speichern"
+   erledigt der Rest). App-Chrome ist auf Papier irrelevant. */
+@media print {
+	.site-header,
+	.site-footer,
+	.sidebar,
+	.sidebar-toggle {
+		display: none !important;
+	}
+}
