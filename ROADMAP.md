@@ -343,7 +343,19 @@ bewusst öffentlich erreichbar sein soll:
 
 **Veröffentlichung:** Das Image liegt als `ghcr.io/dmyrenne/quince` auf der GitHub Container
 Registry (Tags `latest` und `0.1.0`, mit `org.opencontainers.image.source`-Label, damit das Paket
-am Repo hängt und dessen Sichtbarkeit erbt). `docker-compose.yml` zieht dieses Image jetzt
+am Repo hängt und dessen Sichtbarkeit erbt).
+
+**Multi-Arch (amd64 + arm64).** Der erste Push war versehentlich nur amd64 — auf ARM-Hardware
+(Raspberry Pi, ARM-VPS, Apple Silicon) scheitert der Pull dann mit „no matching manifest for
+linux/arm64/v8". Gebaut wird jetzt per `docker buildx build --platform linux/amd64,linux/arm64`
+als Manifest-Liste, aus der Docker automatisch die passende Variante zieht. Wichtig dabei: Die
+Build-Stage im Dockerfile ist auf `--platform=$BUILDPLATFORM` festgenagelt, läuft also auf der
+Architektur des Baurechners statt der Zielarchitektur. Das Ergebnis ist reines JavaScript und
+damit ohnehin architekturunabhängig; ohne diese Zeile liefe der komplette Vite-Build fürs
+arm64-Image unter QEMU-Emulation und würde ein Vielfaches an Zeit brauchen. Nur die Runtime-Stage
+wird tatsächlich pro Architektur gebaut, und die installiert mit `fflate` als einziger
+Laufzeitabhängigkeit nichts Natives. Verifiziert, indem das arm64-Image gezielt gezogen und
+gestartet wurde (`uname -m` → `aarch64`, `process.arch` → `arm64`, App antwortet mit HTTP 200). `docker-compose.yml` zieht dieses Image jetzt
 standardmäßig, statt lokal zu bauen — der Normalfall ist „compose-Datei holen, `up -d`, fertig",
 ohne den Quellcode auszuchecken. Über `QUINCE_VERSION` lässt sich ein Tag festnageln statt
 `latest` zu folgen. Die `build: .`-Zeile steht weiterhin auskommentiert direkt darunter, für alle,

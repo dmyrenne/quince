@@ -41,8 +41,9 @@ read, upload, edit and delete every recipe.
 ## Self-hosting with Docker
 
 Ready-made images are published to the GitHub Container Registry as
-[`ghcr.io/dmyrenne/quince`](https://github.com/dmyrenne/quince/pkgs/container/quince). Nothing has
-to be built locally.
+[`ghcr.io/dmyrenne/quince`](https://github.com/dmyrenne/quince/pkgs/container/quince), built for
+both `linux/amd64` and `linux/arm64` — so a Raspberry Pi, an ARM VPS or an Apple-silicon Mac pulls
+the right variant automatically. Nothing has to be built locally.
 
 ### With Compose (recommended)
 

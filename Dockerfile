@@ -1,5 +1,9 @@
 # --- Build stage ---
-FROM node:22-alpine AS build
+# Läuft bewusst auf der Architektur des Baurechners ($BUILDPLATFORM) statt auf
+# der Zielarchitektur: Das Ergebnis ist reines JavaScript und damit ohnehin
+# architekturunabhängig. Ohne das würde der komplette Vite-Build beim
+# arm64-Image unter QEMU-Emulation laufen und ein Vielfaches an Zeit brauchen.
+FROM --platform=$BUILDPLATFORM node:22-alpine AS build
 WORKDIR /app
 
 COPY package.json package-lock.json ./
