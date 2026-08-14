@@ -1,6 +1,11 @@
 services:
   quince:
-    build: .
+    # Fertiges Image von der GitHub Container Registry. QUINCE_VERSION auf einen
+    # Tag wie 0.1.0 setzen, um eine Version festzunageln statt "latest" zu folgen.
+    image: 'ghcr.io/dmyrenne/quince:${QUINCE_VERSION:-latest}'
+    # Lieber selbst aus dem Quellcode bauen? Dann die Zeile oben auskommentieren,
+    # die folgende einkommentieren und mit "docker compose up -d --build" starten.
+    # build: .
     ports:
       - '${QUINCE_PORT:-3000}:3000'
     # Bei READ_ONLY=true (siehe unten) schreibt die App ohnehin nichts hierhin —

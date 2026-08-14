@@ -341,6 +341,14 @@ bewusst öffentlich erreichbar sein soll:
 - `quitte_favicon.ico` lag unbenutzt im Projektwurzelverzeichnis; liegt jetzt als
   `static/favicon.ico` und ist in `app.html` verlinkt, wird also endlich auch angezeigt.
 
+**Veröffentlichung:** Das Image liegt als `ghcr.io/dmyrenne/quince` auf der GitHub Container
+Registry (Tags `latest` und `0.1.0`, mit `org.opencontainers.image.source`-Label, damit das Paket
+am Repo hängt und dessen Sichtbarkeit erbt). `docker-compose.yml` zieht dieses Image jetzt
+standardmäßig, statt lokal zu bauen — der Normalfall ist „compose-Datei holen, `up -d`, fertig",
+ohne den Quellcode auszuchecken. Über `QUINCE_VERSION` lässt sich ein Tag festnageln statt
+`latest` zu folgen. Die `build: .`-Zeile steht weiterhin auskommentiert direkt darunter, für alle,
+die lieber selbst bauen; beide Varianten sind mit `docker compose config` gegengeprüft.
+
 **Für GitHub vorbereitet:** MIT-Lizenz ergänzt, README auf Englisch neu geschrieben (der veraltete
 Tech-Stack-Absatz nannte noch „Liebe Heide“ und Open Sans), mit deutlichem Hinweis darauf, dass
 Quince keinerlei Authentifizierung hat und ein schreibfähiger Betrieb deshalb nicht ins offene

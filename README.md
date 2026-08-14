@@ -40,19 +40,19 @@ read, upload, edit and delete every recipe.
 
 ## Self-hosting with Docker
 
-### From the published image
+Ready-made images are published to the GitHub Container Registry as
+[`ghcr.io/dmyrenne/quince`](https://github.com/dmyrenne/quince/pkgs/container/quince). Nothing has
+to be built locally.
 
-```bash
-docker run -d --name quince -p 3000:3000 -v quince-data:/data -e ORIGIN=http://localhost:3000 ghcr.io/dmyrenne/quince:latest
-```
+### With Compose (recommended)
 
-### From source with Compose
+Grab [`docker-compose.yml`](docker-compose.yml) and [`.env.example`](.env.example), then:
 
 ```bash
 cp .env.example .env
 ```
 
-Adjust `.env` (see below), then start:
+Adjust `.env` (see below) and start — the image is pulled automatically:
 
 ```bash
 docker compose up -d
@@ -66,15 +66,37 @@ front of it for outside access.
 Without a `.env` the defaults from `docker-compose.yml` apply, which match a local instance on
 port 3000.
 
+To update later:
+
+```bash
+docker compose pull && docker compose up -d
+```
+
+### With plain `docker run`
+
+```bash
+docker run -d --name quince -p 3000:3000 -v quince-data:/data -e ORIGIN=http://localhost:3000 ghcr.io/dmyrenne/quince:latest
+```
+
+### Building it yourself
+
+`docker-compose.yml` carries a commented-out `build: .` line. Comment out the `image:` line above
+it, uncomment `build:`, and start with:
+
+```bash
+docker compose up -d --build
+```
+
 ### Configuration (`.env`)
 
-| Variable          | Default                 | Meaning                                                    |
-| ----------------- | ----------------------- | ---------------------------------------------------------- |
-| `QUINCE_PORT`     | `3000`                  | Port on the host                                           |
-| `ORIGIN`          | `http://localhost:3000` | **Important:** the URL Quince is actually reached under    |
-| `QUINCE_DATA`     | `./data`                | Where recipes are stored on the host                       |
-| `BODY_SIZE_LIMIT` | `128M`                  | Maximum upload size                                        |
-| `READ_ONLY`       | `false`                 | Ephemeral, read-only mode for public instances (see below) |
+| Variable          | Default                 | Meaning                                                       |
+| ----------------- | ----------------------- | ------------------------------------------------------------- |
+| `QUINCE_VERSION`  | `latest`                | Image tag to pull; pin to e.g. `0.1.0` to stay on one version |
+| `QUINCE_PORT`     | `3000`                  | Port on the host                                              |
+| `ORIGIN`          | `http://localhost:3000` | **Important:** the URL Quince is actually reached under       |
+| `QUINCE_DATA`     | `./data`                | Where recipes are stored on the host                          |
+| `BODY_SIZE_LIMIT` | `128M`                  | Maximum upload size                                           |
+| `READ_ONLY`       | `false`                 | Ephemeral, read-only mode for public instances (see below)    |
 
 `ORIGIN` has to match the real URL, otherwise SvelteKit's CSRF protection rejects every upload with
 "Cross-site POST form submissions are forbidden". Behind a reverse proxy, set something like
